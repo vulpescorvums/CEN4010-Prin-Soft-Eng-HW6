@@ -1,0 +1,159 @@
+<!-- filename: searchStudent.html -->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search Student</title>
+  <!-- Include Bootstrap CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <!-- Include Bootstrap JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script>
+    // Get the current page URL
+    var currentPage = window.location.pathname;
+
+    // Set the active class based on the current page
+    switch (currentPage) {
+      case '/displayStudent.html':
+        $('#display-link').addClass('active');
+        break;
+      // Add cases for other pages as needed
+    }
+  </script>
+
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th,
+    td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navigation bar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid"> <!-- Use container-fluid to occupy full width -->
+      <!-- Hamburger menu button -->
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Navigation links -->
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="addStudent.html">Add</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="updateStudent.html">Update</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="deleteStudent.html">Delete</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="displayStudent.html">Display</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="listStudents.html">List</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="searchStudent.html">Search</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <h1>SEARCH FOR A STUDENT BY THEIR LAST NAME</h1>
+  <label for="lname">Last Name:</label>
+  <input type="text" id="lname" name="lname"><br><br>
+  <button onclick="searchStudent()" class="btn btn-primary">Search</button>
+  <br>
+  <br>
+  <div id="mydiv" name="mydiv">
+    <table id="studentTable">
+      <thead>
+        <tr>
+          <th>Record ID</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>GPA</th>
+          <th>Enrolled</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <script>
+
+    // Get the search query from the URL
+    var urlParams = new URLSearchParams(window.location.search);
+    var searchQuery = urlParams.get("query");
+
+    // Check if a search query is present
+    if (searchQuery) {
+      // Set the search input value to the query
+      document.getElementById("lname").value = searchQuery;
+
+      // Call the searchStudent function
+      searchStudent();
+    }
+
+    function displayTable(student) {
+      var tableHtml = `
+        <tr>
+          <td>${student.record_id}</td>
+          <td>${student.first_name}</td>
+          <td>${student.last_name}</td>
+          <td>${student.gpa}</td>
+          <td>${student.enrolled}</td>
+        </tr>`;
+      return tableHtml;
+    }
+
+    function searchStudent() {
+      var lname_val = $("#lname").val();
+      $.ajax({
+        url: "http://localhost:5678/students/lastname/" + lname_val,
+        type: "get",
+        dataType: "json",
+        success: function (response) {
+          if (response) {
+            var tableHtml = displayTable(response);
+            $("#studentTable tbody").html(tableHtml);
+          } else {
+            $("#studentTable tbody").empty(); // Clear the table body if no results
+            $("#mydiv").text("Student not found.");
+          }
+        },
+        error: function (xhr) {
+          console.log(xhr);
+          $("#mydiv").text('error: ' + xhr.responseText);
+        }
+      });
+    }
+
+  </script>
+
+</body>
+
+</html>

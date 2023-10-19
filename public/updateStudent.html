@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Student</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <!-- Include Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+        /* Custom CSS to remove left padding */
+        .no-left-padding {
+            padding-left: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light-">
+        <div class="container-fluid"> <!-- Use container-fluid to occupy full width -->
+            <!-- Hamburger menu button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navigation links -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="addStudent.html">Add</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="updateStudent.html">Update</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="deleteStudent.html">Delete</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="displayStudent.html">Display</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="listStudents.html">List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="searchStudent.html">Search</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <form class="d-flex">
+            <input class="form-control me-2" type="text" id="searchInput" placeholder="Search by Last Name"
+                aria-label="Search">
+            <button class="btn btn-outline-success" type="button" onclick="searchStudentFromNavbar()">Search</button>
+        </form>
+    </nav>
+
+    <!-- Page content -->
+    <div class="container-fluid">
+        <h1>UPDATE A STUDENT'S RECORD</h1>
+
+        <label for="recordId">Record ID:</label>
+        <input type="text" id="recordId" name="recordId"><br><br>
+
+        <label for="fname">First Name:</label>
+        <input type="text" id="fname" name="fname"><br><br>
+
+        <label for="lname">Last Name:</label>
+        <input type="text" id="lname" name="lname"><br><br>
+
+        <label for="gpa">GPA:</label>
+        <input type="text" id="gpa" name="gpa"><br><br>
+
+        <label for="enrolled">Enrolled:</label>
+        <input type="text" id="enrolled" name="enrolled"><br><br>
+
+        <button onclick="updateStudent()" class="btn btn-primary">Update Student</button>
+        <br>
+        <br>
+        <div id="mydiv"></div>
+    </div>
+
+    <script>
+
+        function searchStudentFromNavbar() {
+            var searchQuery = document.getElementById("searchInput").value;
+            if (searchQuery.trim() !== "") {
+                window.location.href = "searchStudent.html?query=" + encodeURIComponent(searchQuery);
+            }
+        }
+
+        function updateStudent() {
+            var fname_val = $("#fname").val();
+            var lname_val = $("#lname").val();
+            var gpa_val = $("#gpa").val();
+            var enrolled_val = $("#enrolled").val();
+            var recordId_val = $("#recordId").val();
+
+            $.ajax({
+                url: "http://localhost:5678/Students/" + recordId_val,
+                type: "put",
+                data: {
+                    first_name: fname_val,
+                    last_name: lname_val,
+                    gpa: gpa_val,
+                    enrolled: enrolled_val,
+                    record_id: recordId_val
+                },
+                success: function (response) {
+                    console.log(response)
+                    $("#mydiv").text(response.message);
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseText)
+                    $("#mydiv").text('error: ' + xhr.responseText);
+                }
+            });
+        }
+    </script>
+
+</body>
+
+</html>
