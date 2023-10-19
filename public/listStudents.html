@@ -92,7 +92,7 @@
 
         function getStudents() {
             $.ajax({
-                url: "http://localhost:5678/students", // The endpoint for listing all students
+                url: "/students", // The endpoint for listing all students
                 type: "get",
                 dataType: "json", // Specify the data type of the response
                 success: function (response) {

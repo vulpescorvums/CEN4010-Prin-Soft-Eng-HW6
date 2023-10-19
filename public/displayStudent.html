@@ -121,7 +121,7 @@
     function displayStudent() {
       var id_val = $("#record_id").val();
       $.ajax({
-        url: "http://localhost:5678/students/record/" + id_val,
+        url: "/students/record/" + id_val,
         type: "get",
         success: function (response) {
           var student = JSON.parse(response);

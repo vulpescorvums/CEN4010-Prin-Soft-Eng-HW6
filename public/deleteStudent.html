@@ -89,7 +89,7 @@
             var studentId = $("#studentId").val();
 
             $.ajax({
-                url: "http://localhost:5678/students/" + studentId, // Endpoint for deleting a student by ID
+                url: "/students/" + studentId, // Endpoint for deleting a student by ID
                 type: "delete",
                 success: function (response) {
                     console.log(response);

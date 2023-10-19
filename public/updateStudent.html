@@ -105,7 +105,7 @@
             var recordId_val = $("#recordId").val();
 
             $.ajax({
-                url: "http://localhost:5678/Students/" + recordId_val,
+                url: "/Students/" + recordId_val,
                 type: "put",
                 data: {
                     first_name: fname_val,

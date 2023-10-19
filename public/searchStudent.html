@@ -133,7 +133,7 @@
     function searchStudent() {
       var lname_val = $("#lname").val();
       $.ajax({
-        url: "http://localhost:5678/students/lastname/" + lname_val,
+        url: "/students/lastname/" + lname_val,
         type: "get",
         dataType: "json",
         success: function (response) {
