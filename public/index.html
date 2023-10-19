@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STUDENT REGISTRATION SYSTEM</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <!-- Include Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+    <style>
+        .no-left-padding {
+            padding-left: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navigation bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light-">
+        <div class="container-fluid"> <!-- Use container-fluid to occupy full width -->
+            <!-- Hamburger menu button -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navigation links -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="addStudent.html">Add</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="updateStudent.html">Update</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="deleteStudent.html">Delete</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="displayStudent.html">Display</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="listStudents.html">List</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="searchStudent.html">Search</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <form class="d-flex">
+            <input class="form-control me-2" type="text" id="searchInput" placeholder="Search by Last Name"
+                aria-label="Search">
+            <button class="btn btn-outline-success" type="button" onclick="searchStudentFromNavbar()">Search</button>
+        </form>
+    </nav>
+
+    <div class="container">
+        <!-- Your page content goes here -->
+        <h1>STUDENT REGISTRATION SYSTEM</h1>
+        <h3>Kyler Mallonn Z23640101</h3>
+        <style>
+            h1,
+            h3 {
+                text-align: center;
+            }
+        </style>
+        <!-- Add the content of your home page here -->
+    </div>
+    <script>
+
+        function searchStudentFromNavbar() {
+            var searchQuery = document.getElementById("searchInput").value;
+            if (searchQuery.trim() !== "") {
+                window.location.href = "searchStudent.html?query=" + encodeURIComponent(searchQuery);
+            }
+        }
+
+        function displayTable(student) {
+            var tableHtml = `
+            <tr>
+                <td>${student.record_id}</td>
+                <td>${student.first_name}</td>
+                <td>${student.last_name}</td>
+                <td>${student.gpa}</td>
+                <td>${student.enrolled}</td>
+            </tr>`;
+            return tableHtml;
+        }
+
+        function searchStudent() {
+            var lname_val = $("#searchInput").val();
+            $.ajax({
+                url: "http://localhost:5678/students/lastname/" + lname_val,
+                type: "get",
+                dataType: "json",
+                success: function (response) {
+                    if (response) {
+                        var tableHtml = displayTable(response);
+                        $("#studentTable tbody").html(tableHtml);
+                    } else {
+                        $("#studentTable tbody").empty(); // Clear the table body if no results
+                        $("#mydiv").text("Student not found.");
+                    }
+                },
+                error: function (xhr) {
+                    console.log(xhr);
+                    $("#mydiv").text('error: ' + xhr.responseText);
+                }
+            });
+        }
+
+
+    </script>
+
+</body>
+
+</html>
